@@ -21,10 +21,10 @@ llvm_FunctionRef llvm_Function_create(
     return reinterpret_cast<llvm_FunctionRef>(function);
 }
 
-// void llvm_Function_dispose(llvm_FunctionRef ref) {
-//     auto function = reinterpret_cast<llvm::Function*>(ref);
-//     function->~Function();
-// }
+void llvm_Function_dispose(llvm_FunctionRef ref) {
+    auto function = reinterpret_cast<llvm::Function*>(ref);
+    function->~Function();
+}
 
 llvm_ValueRef llvm_Function_getArg(llvm_FunctionRef ref, unsigned int i) {
     auto function = reinterpret_cast<llvm::Function*>(ref);

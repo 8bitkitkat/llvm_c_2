@@ -33,9 +33,10 @@ llvm_FunctionRef llvm_Function_create(
     unsigned int AddrSpace,
     const char* NameData,
     size_t NameLength,
-    llvm_ModuleRef);
+    // [[nullable]]
+    llvm_ModuleRef /* = nullptr */);
 
-// void llvm_Function_dispose(llvm_FunctionRef);
+void llvm_Function_dispose(llvm_FunctionRef);
 
 llvm_ValueRef llvm_Function_getArg(llvm_FunctionRef, unsigned int i);
 
