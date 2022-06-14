@@ -20,4 +20,6 @@ llvm_BasicBlockRef llvm_BasicBlock_create(
     // [[nullable]]
     llvm_BasicBlockRef InsertBefore /* = nullptr */);
 
+void llvm_BasicBlock_dispose(llvm_BasicBlockRef);
+
 LLVM_C_EXTERN_C_END

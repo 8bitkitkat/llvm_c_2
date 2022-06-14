@@ -19,4 +19,9 @@ llvm_BasicBlockRef llvm_BasicBlock_create(
         llvm::BasicBlock::Create(*ctx, name, parent, insert_before));
 }
 
+void llvm_BasicBlock_dispose(llvm_BasicBlockRef ref) {
+    auto bb = reinterpret_cast<llvm::BasicBlock*>(ref);
+    bb->~BasicBlock();
+}
+
 LLVM_C_EXTERN_C_END
