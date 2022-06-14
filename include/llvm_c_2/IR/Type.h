@@ -13,6 +13,9 @@ LLVM_C_EXTERN_C_BEGIN
 typedef struct llvm_Type_Opaque* llvm_TypeRef;
 
 /// Safe to cast to `llvm_TypeRef`
+typedef struct llvm_IntegerType_Opaque* llvm_IntegerTypeRef;
+
+/// Safe to cast to `llvm_TypeRef`
 typedef struct llvm_FunctionType_Opaque* llvm_FunctionTypeRef;
 
 /// Safe to cast to `llvm_TypeRef`
@@ -53,7 +56,7 @@ typedef enum {
 
 llvm_TypeRef llvm_Type_getVoidTy(llvm_ContextRef);
 
-llvm_TypeRef llvm_Type_getIntNTy(llvm_ContextRef, unsigned int N);
+llvm_IntegerTypeRef llvm_Type_getIntNTy(llvm_ContextRef, unsigned int N);
 
 llvm_PointerTypeRef llvm_Type_getPointerTo(const llvm_TypeRef, unsigned AddrSpace);
 
@@ -62,9 +65,9 @@ llvm_TypeID llvm_Type_getTypeID(const llvm_TypeRef);
 // =-=-=-=-=-=-=
 // IntegerType
 
-llvm_TypeRef llvm_IntegerType_get(llvm_ContextRef, unsigned int num_bits);
+llvm_IntegerTypeRef llvm_IntegerType_get(llvm_ContextRef, unsigned int num_bits);
 
-llvm_TypeRef llvm_IntegerType_getInt64Ty(llvm_ContextRef);
+llvm_IntegerTypeRef llvm_IntegerType_getInt64Ty(llvm_ContextRef);
 
 // =-=-=-=-=-=-=
 // FunctionType

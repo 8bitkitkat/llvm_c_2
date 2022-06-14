@@ -26,9 +26,9 @@ llvm_TypeRef llvm_Type_getVoidTy(llvm_ContextRef ref) {
     return reinterpret_cast<llvm_TypeRef>(llvm::Type::getVoidTy(*ctx));
 }
 
-llvm_TypeRef llvm_Type_getIntNTy(llvm_ContextRef ref, unsigned int N) {
+llvm_IntegerTypeRef llvm_Type_getIntNTy(llvm_ContextRef ref, unsigned int N) {
     auto ctx = reinterpret_cast<llvm::LLVMContext*>(ref);
-    return reinterpret_cast<llvm_TypeRef>(llvm::Type::getIntNTy(*ctx, N));
+    return reinterpret_cast<llvm_IntegerTypeRef>(llvm::Type::getIntNTy(*ctx, N));
 }
 
 llvm_PointerTypeRef llvm_Type_getPointerTo(const llvm_TypeRef ref, unsigned AddrSpace) {
@@ -44,14 +44,14 @@ llvm_TypeID llvm_Type_getTypeID(const llvm_TypeRef ref) {
 // =-=-=-=-=-=-=
 // IntegerType
 
-llvm_TypeRef llvm_IntegerType_get(llvm_ContextRef ctx_ref, unsigned int num_bits) {
+llvm_IntegerTypeRef llvm_IntegerType_get(llvm_ContextRef ctx_ref, unsigned int num_bits) {
     auto ctx = reinterpret_cast<llvm::LLVMContext*>(ctx_ref);
-    return reinterpret_cast<llvm_TypeRef>(llvm::IntegerType::get(*ctx, num_bits));
+    return reinterpret_cast<llvm_IntegerTypeRef>(llvm::IntegerType::get(*ctx, num_bits));
 }
 
-llvm_TypeRef llvm_IntegerType_getInt64Ty(llvm_ContextRef ctx_ref) {
+llvm_IntegerTypeRef llvm_IntegerType_getInt64Ty(llvm_ContextRef ctx_ref) {
     auto ctx = reinterpret_cast<llvm::LLVMContext*>(ctx_ref);
-    return reinterpret_cast<llvm_TypeRef>(llvm::IntegerType::getInt64Ty(*ctx));
+    return reinterpret_cast<llvm_IntegerTypeRef>(llvm::IntegerType::getInt64Ty(*ctx));
 }
 
 // =-=-=-=-=-=-=
