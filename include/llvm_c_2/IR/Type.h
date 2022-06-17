@@ -73,7 +73,7 @@ llvm_IntegerTypeRef llvm_IntegerType_getInt64Ty(llvm_ContextRef);
 // FunctionType
 
 llvm_FunctionTypeRef llvm_FunctionType_get(
-    llvm_TypeRef Result, llvm_TypeRef* Params, size_t ParamsLength, bool isVarArg);
+    llvm_TypeRef Result, llvm_TypeRef const* Params, size_t ParamsLength, bool isVarArg);
 
 // =-=-=-=-=-=
 // StructType

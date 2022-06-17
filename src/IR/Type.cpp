@@ -58,14 +58,11 @@ llvm_IntegerTypeRef llvm_IntegerType_getInt64Ty(llvm_ContextRef ctx_ref) {
 // FunctionType
 
 llvm_FunctionTypeRef llvm_FunctionType_get(
-    llvm_TypeRef Result, llvm_TypeRef* Params, size_t ParamsLength, bool isVarArg //
+    llvm_TypeRef Result, llvm_TypeRef const* Params, size_t ParamsLength, bool isVarArg //
 ) {
     auto ret_ty = reinterpret_cast<llvm::Type*>(Result);
-    auto args = std::vector<llvm::Type*>();
-    for (size_t i = 0; i < ParamsLength; i++) {
-        auto arg = reinterpret_cast<llvm::Type*>(Params[i]);
-        args.emplace_back(arg);
-    }
+    auto args =
+        llvm::ArrayRef<llvm::Type*>(reinterpret_cast<llvm::Type* const*>(Params), ParamsLength);
     return reinterpret_cast<llvm_FunctionTypeRef>(llvm::FunctionType::get(ret_ty, args, isVarArg));
 }
 
