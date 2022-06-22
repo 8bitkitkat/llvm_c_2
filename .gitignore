@@ -2,6 +2,7 @@ CMakeLists.txt
 *.cmake
 vendor.d
 build
+cmake-build-debug
 
 .cache
 .vscode

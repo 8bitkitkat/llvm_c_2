@@ -10,6 +10,7 @@
 #include "IR/Module.h"
 #include "IR/Type.h"
 #include "IR/Value.h"
+#include "IR/Verifier.h"
 
 #include "ExecutionEngine/ExecutionEngine.h"
 #include "ExecutionEngine/GenericValue.h"
