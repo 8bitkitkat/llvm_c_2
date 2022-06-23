@@ -54,6 +54,8 @@ typedef enum {
 // =-=-=
 // Type
 
+void llvm_Type_dump(llvm_TypeRef);
+
 llvm_TypeRef llvm_Type_getVoidTy(llvm_ContextRef);
 
 llvm_IntegerTypeRef llvm_Type_getIntNTy(llvm_ContextRef, unsigned int N);

@@ -21,6 +21,12 @@ LLVM_C_EXTERN_C_BEGIN
 // =-=-=
 // Type
 
+void llvm_Type_dump(llvm_TypeRef ref) {
+    auto ty = reinterpret_cast<const llvm::Type*>(ref);
+    // ty->dump();
+    ty->print(llvm::errs(), true, false);
+}
+
 llvm_TypeRef llvm_Type_getVoidTy(llvm_ContextRef ref) {
     auto ctx = reinterpret_cast<llvm::LLVMContext*>(ref);
     return reinterpret_cast<llvm_TypeRef>(llvm::Type::getVoidTy(*ctx));
