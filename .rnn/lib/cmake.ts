@@ -1,8 +1,8 @@
 import { expandGlobSync } from "https://deno.land/std@0.121.0/fs/mod.ts";
-import { StringBuilder } from './util.ts';
+import { StringBuilder } from "./util.ts";
 
 import * as rnn from "./rnn.ts";
-import * as cxx from './cxx.ts';
+import * as cxx from "./cxx.ts";
 import * as util from "./util.ts";
 
 export enum BinaryKind {
@@ -21,7 +21,7 @@ export class CMakeGenerator implements rnn.Generator {
 
   generate(project: rnn.Project): Promise<void> {
     generate(project.name, this.targets);
-    return (async () => { })();
+    return (async () => {})();
   }
 
   clean(): Promise<void> {
@@ -30,45 +30,45 @@ export class CMakeGenerator implements rnn.Generator {
 }
 
 export type BuildTarget = {
-  name: string,
-  kind: BinaryKind,
-  dir: string,
-  files: string[],
-  includeDirs: string[],
-  links: string[],
-  linkDirs: string[],
-  cxx_version: cxx.Version,
-  build_options: string[],
-  position_independent_code?: boolean,
-  precompiled_header?: string,
-  defines: [string, string][],
-  libraries: cxx.Library[],
-}
+  name: string;
+  kind: BinaryKind;
+  dir: string;
+  files: string[];
+  includeDirs: string[];
+  links: string[];
+  linkDirs: string[];
+  cxx_version: cxx.Version;
+  build_options: string[];
+  position_independent_code?: boolean;
+  precompiled_header?: string;
+  defines: [string, string][];
+  libraries: cxx.Library[];
+};
 
 function makePathRelative(str: string): string {
   const cwd = Deno.cwd();
-  return str.replace(`${cwd}/`, '');
+  return str.replace(`${cwd}/`, "");
 }
 
 function generateBuildTarget(target: BuildTarget): string {
   // setup
   const properties = new Map<string, string>();
-  if (target.cxx_version != 'default') {
-    properties.set('CXX_STANDARD', target.cxx_version);
-    properties.set('CXX_STANDARD_REQUIRED', 'YES');
+  if (target.cxx_version != "default") {
+    properties.set("CXX_STANDARD", target.cxx_version);
+    properties.set("CXX_STANDARD_REQUIRED", "YES");
   }
-  properties.set('CXX_EXTENSIONS', 'NO');
-  properties.set('INTERPROCEDURAL_OPTIMIZATION', 'False');
+  properties.set("CXX_EXTENSIONS", "NO");
+  properties.set("INTERPROCEDURAL_OPTIMIZATION", "False");
 
   if (target.kind == BinaryKind.sharedLib) {
-    properties.set('POSITION_INDEPENDENT_CODE', 'True');
-    target.build_options.push('-fPIC');
+    properties.set("POSITION_INDEPENDENT_CODE", "True");
+    target.build_options.push("-fPIC");
   } else {
-    properties.set('POSITION_INDEPENDENT_CODE', 'False');
+    properties.set("POSITION_INDEPENDENT_CODE", "False");
   }
 
-  if (!target.dir.endsWith('/')) {
-    target.dir = target.dir + '/';
+  if (!target.dir.endsWith("/")) {
+    target.dir = target.dir + "/";
   }
 
   const sb = new StringBuilder();
@@ -78,7 +78,7 @@ function generateBuildTarget(target: BuildTarget): string {
     case BinaryKind.consoleApp:
     case BinaryKind.windowedApp:
       sb.push(`add_executable("${target.name}"\n`);
-      properties.set('POSITION_INDEPENDENT_CODE', 'False');
+      properties.set("POSITION_INDEPENDENT_CODE", "False");
       break;
 
     case BinaryKind.staticLib:
@@ -90,82 +90,89 @@ function generateBuildTarget(target: BuildTarget): string {
   }
 
   for (let glob of target.files) {
-    if (!glob.startsWith('./')) {
+    if (!glob.startsWith("./")) {
       glob = target.dir + glob;
     }
     for (const file of expandGlobSync(glob)) {
       sb.push(`  "${makePathRelative(file.path)}"\n`);
     }
   }
-  sb.push(')\n\n');
+  sb.push(")\n\n");
 
   // include
   sb.push(`target_include_directories("${target.name}" PRIVATE\n`);
   for (let glob of target.includeDirs) {
-    if (!glob.startsWith('/') && !glob.startsWith('./')) {
+    if (!glob.startsWith("/") && !glob.startsWith("./")) {
       glob = target.dir + glob;
     }
 
-    if (glob.indexOf('*') != -1)
+    if (glob.indexOf("*") != -1) {
       for (const dir of expandGlobSync(glob)) {
         sb.push(`  "${dir.path}"\n`);
       }
-    else
+    } else {
       sb.push(`  "${glob}"\n`);
+    }
   }
-  sb.push(')\n\n');
+  sb.push(")\n\n");
 
   // link dirs
   sb.push(`target_link_directories("${target.name}" PRIVATE\n`);
   for (let glob of target.linkDirs) {
-    if (!glob.startsWith('/') && !glob.startsWith('./')) {
+    if (!glob.startsWith("/") && !glob.startsWith("./")) {
       glob = target.dir + glob;
     }
 
-    if (glob.indexOf('*') != -1)
+    if (glob.indexOf("*") != -1) {
       for (const file of expandGlobSync(glob)) {
         sb.push(`  "${file.path}"\n`);
       }
-    else
+    } else {
       sb.push(`  "${glob}"\n`);
+    }
   }
-  sb.push(')\n\n');
+  sb.push(")\n\n");
 
   // links
   sb.push(`target_link_libraries("${target.name}"\n`);
   for (const link of target.links) {
     sb.push(`  "${link}"\n`);
   }
-  sb.push(')\n\n');
+  sb.push(")\n\n");
 
   // build options
   sb.push(`target_compile_options("${target.name}" PRIVATE\n`);
   for (const option of target.build_options) {
     sb.push(`  ${option}\n`);
   }
-  sb.push(')\n\n');
+  sb.push(")\n\n");
 
   // properties
   sb.push(`set_target_properties("${target.name}" PROPERTIES\n`);
   for (const [key, value] of properties.entries()) {
     sb.push(`  ${key} ${value}\n`);
   }
-  sb.push(')\n\n');
+  sb.push(")\n\n");
 
   // Defines
-  sb.push(`target_compile_definitions("${target.name}" PUBLIC\n`)
+  sb.push(`target_compile_definitions("${target.name}" PUBLIC\n`);
   for (const [key, value] of target.defines) {
-    sb.push(`  ${key}${value !== '' ? `="${value}""` : ''}\n`)
+    sb.push(`  ${key}${value !== "" ? `="${value}"` : ""}\n`);
   }
-  sb.push(')\n\n');
+  sb.push(")\n\n");
 
   // pre-compiled header
-  if (target.precompiled_header)
-    sb.push(`target_precompile_headers("${target.name}" PUBLIC "${target.dir + target.precompiled_header}")\n\n`)
+  if (target.precompiled_header) {
+    sb.push(
+      `target_precompile_headers("${target.name}" PUBLIC "${
+        target.dir + target.precompiled_header
+      }")\n\n`,
+    );
+  }
 
   // windows && windowed
-  if ((Deno.build.os == 'windows') && (target.kind == BinaryKind.windowedApp)) {
-    sb.push(`target_link_options("${target.name}" PRIVATE -mwindows)\n\n`)
+  if ((Deno.build.os == "windows") && (target.kind == BinaryKind.windowedApp)) {
+    sb.push(`target_link_options("${target.name}" PRIVATE -mwindows)\n\n`);
   }
 
   return sb.string;
@@ -173,7 +180,10 @@ function generateBuildTarget(target: BuildTarget): string {
 
 type Path = string; // just for readability
 
-function generateCMakeSources(name: string, targets: BuildTarget[]): Map<Path, string> {
+function generateCMakeSources(
+  name: string,
+  targets: BuildTarget[],
+): Map<Path, string> {
   const sb = new StringBuilder();
   const map = new Map<Path, string>();
 
@@ -208,7 +218,7 @@ export async function generate(name: string, targets: BuildTarget[]) {
       const new_linkDirs: string[] = [];
 
       for (const dir of lib.includes) {
-        if (dir.startsWith('/') || dir.startsWith('./')) {
+        if (dir.startsWith("/") || dir.startsWith("./")) {
           // target.includeDirs.push(dir);
           new_includeDirs.push(dir);
         } else {
@@ -217,7 +227,7 @@ export async function generate(name: string, targets: BuildTarget[]) {
         }
       }
       for (const dir of lib.linkDirs) {
-        if (dir.startsWith("/") || dir.startsWith('./')) {
+        if (dir.startsWith("/") || dir.startsWith("./")) {
           // target.linkDirs.push(dir);
           new_linkDirs.push(dir);
         } else {
@@ -234,19 +244,22 @@ export async function generate(name: string, targets: BuildTarget[]) {
       Deno.chdir(root);
 
       if (util.pathExists(vendor_root)) {
-        if (util.pathExists(`${vendor_root}/.done`))
+        if (util.pathExists(`${vendor_root}/.done`)) {
           continue;
-        else
+        } else {
           await util.remove(vendor_root, { recursive: true });
+        }
       }
 
       await Deno.mkdir(vendor_root, { recursive: true });
 
       if (lib.remote) {
         await util.runCmd({
-          cmd: `git clone --depth 1 ${lib.remote.recursive ? '--recursive' : ''} ${lib.remote.git} ${vendor_root}`
-            .replace(/\s\s+/g, ' ') // collapse multiple spaces into one
-            .split(' '),
+          cmd: `git clone --depth 1 ${
+            lib.remote.recursive ? "--recursive" : ""
+          } ${lib.remote.git} ${vendor_root}`
+            .replace(/\s\s+/g, " ") // collapse multiple spaces into one
+            .split(" "),
           cwd: root,
         });
       }
@@ -258,7 +271,7 @@ export async function generate(name: string, targets: BuildTarget[]) {
 
       Deno.chdir(root);
       Deno.chdir(vendor_root);
-      Deno.writeTextFile('.done', '');
+      Deno.writeTextFile(".done", "");
     }
   }
   Deno.chdir(root);
@@ -272,8 +285,12 @@ export async function generate(name: string, targets: BuildTarget[]) {
   }
 }
 
-export async function setupForBuild(projectDir: string, generator = 'Ninja', buildDir = 'build') {
+export async function setupForBuild(
+  projectDir: string,
+  generator = "Ninja",
+  buildDir = "build",
+) {
   const dir = projectDir + "/" + buildDir;
   await Deno.mkdir(dir, { recursive: true });
-  await util.runCmd({ cmd: ['cmake', '-G', generator, '../'], cwd: dir });
+  await util.runCmd({ cmd: ["cmake", "-G", generator, "../"], cwd: dir });
 }
