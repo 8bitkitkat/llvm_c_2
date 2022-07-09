@@ -22,8 +22,8 @@ const cmake_targets: cmake.BuildTarget[] = [
     libraries: [
       {
         name: "llvm",
-        includes: [],
-        linkDirs: [],
+        includes: ["/usr/include", "/usr/lib/llvm-13/include"],
+        linkDirs: ["/usr/lib", "/usr/lib/llvm-13/lib"],
         links: ["LLVM-13"],
         defines: [
           ["_GNU_SOURCE", ""],
