@@ -115,3 +115,25 @@ export async function runCmd(options: Deno.RunOptions, logger?: LineLogger): Pro
   }
   p.close();
 }
+
+export async function cmdOutput(cmd: string[]): Promise<[string, string]> {
+  const p = Deno.run({ stdout: 'piped', stderr: 'piped', cmd });
+  const [_status, stdout, stderr] = await Promise.all([
+    p.status(),
+    p.output(),
+    p.stderrOutput()
+  ]);
+  p.close();
+  const decoder = new TextDecoder();
+  return [decoder.decode(stdout), decoder.decode(stderr)];
+}
+
+export async function cmdOutputStdout(cmd: string[]): Promise<string> {
+  const [stdout, _stderr] = await cmdOutput(cmd);
+  return stdout;
+}
+
+export async function cmdOutputStderr(cmd: string[]): Promise<string> {
+  const [_stdout, stderr] = await cmdOutput(cmd);
+  return stderr;
+}
