@@ -102,8 +102,7 @@ export async function removeGlob(glob: string, options?: { recursive?: boolean }
 }
 
 export async function runCmd(options: Deno.RunOptions, logger?: LineLogger): Promise<void> {
-  const path = options.cwd ? Deno.realPathSync(options.cwd) : null;
-  logger?.log(`Running Command '${options.cmd.join(' ')}' in '${path}'`);
+  logger?.log(`Running Command '${options.cmd.join(' ')}'`);
 
   const p = Deno.run({ stdout: 'piped', stderr: 'piped', ...options });
   const s = await p.status();
