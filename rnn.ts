@@ -22,9 +22,9 @@ const cmake_targets: cmake.BuildTarget[] = [
     libraries: [
       {
         name: "llvm",
-        includes: [(await util.cmdOutputStdout(["llvm-config", "--includedir"])).trim()],
-        linkDirs: [(await util.cmdOutputStdout(["llvm-config", "--libdir"])).trim()],
-        links: [(await util.cmdOutputStdout(["llvm-config", "--libs"])).trim()],
+        includes: [(await util.cmdOutputStdout(["./llvm-config", "--includedir"])).trim()],
+        linkDirs: [(await util.cmdOutputStdout(["./llvm-config", "--libdir"])).trim()],
+        links: [(await util.cmdOutputStdout(["./llvm-config", "--libs"])).trim()],
         defines: [
           ["_GNU_SOURCE", ""],
           ["__STDC_CONSTANT_MACROS", ""],
