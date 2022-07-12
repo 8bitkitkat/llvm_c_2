@@ -48,6 +48,7 @@ async function clean(args: string[]): Promise<void> {
 
   const clean_artifacts = (): Promise<void>[] => {
     return [
+      util.remove(".done"),
       util.remove("CMakeLists.txt"),
       util.remove("build", { recursive: true }),
       util.remove("cmake-build-debug", { recursive: true }),
