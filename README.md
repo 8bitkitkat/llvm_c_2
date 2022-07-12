@@ -32,10 +32,13 @@ Building requires [deno](https://deno.land) as I am using my own _incomplete_ 'm
 ```
 
 This will create a folder `build` where you will find the static library.
+### Usage
 
-### Note
+You need only to add `include` to your include path, and to link `llvm_c_2` and `LLVM-13`.
 
-Building has only been tested on linux.
+```
+-I<llvm_c_2>/include/ -L<llvm_c_2/build> -L<llvm-13 lib dir> -lllvm_c_2 -lLLVM-13
+```
 
 ## Contributing
 
