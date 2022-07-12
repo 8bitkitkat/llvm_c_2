@@ -16,7 +16,7 @@ const cmake_targets: cmake.BuildTarget[] = [
     includeDirs: ["include/llvm_c_2", "src"],
     links: [],
     linkDirs: [],
-    cxx_version: "default",
+    cxx_version: "17",
     build_options: ["-fno-exceptions"],
     defines: [],
     libraries: [

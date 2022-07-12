@@ -15,9 +15,17 @@ Some notable features include:
 
 ## Building
 
+### Requirements
+
+- [deno](https://deno.land)
+- cmake
+- ninja
+- clang
+- llvm-13
+
 Building requires [deno](https://deno.land) as I am using my own _incomplete_ 'meta' build system: `rnn`, written in typescript.
 
-Once deno is installed, all you need to do is run:
+### All that is needed to build `llvm_c_2` is to run:
 
 ```sh
 ./rnn.ts build
