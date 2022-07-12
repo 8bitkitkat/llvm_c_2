@@ -15,7 +15,12 @@ Some notable features include:
 
 ## Building
 
+This has yet to be tested on windows.
+It does work on linux, and should work on macos.
+
 ### Requirements
+
+If you have nix, requirement are easily install by running `nix-shell`.
 
 - [deno](https://deno.land)
 - cmake
@@ -25,13 +30,14 @@ Some notable features include:
 
 Building requires [deno](https://deno.land) as I am using my own _incomplete_ 'meta' build system: `rnn`, written in typescript.
 
-### All that is needed to build `llvm_c_2` is to run:
+### Building the library
+
+The following will create a folder `build` where you will find the static library `libllvm_c_2.a`.
 
 ```sh
 ./rnn.ts build
 ```
 
-This will create a folder `build` where you will find the static library.
 ### Usage
 
 You need only to add `include` to your include path, and to link `llvm_c_2` and `LLVM-13`.
