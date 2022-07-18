@@ -2,7 +2,7 @@
 
 This is my own attempt to create a C frontend to match the C++ API of llvm as close as reasonable.
 
-Currently targeting `llvm-13`
+Currently targeting `llvm-14`
 
 Some notable features include:
 
@@ -26,7 +26,7 @@ If you have nix, requirement are easily install by running `nix-shell`.
 - cmake
 - ninja
 - clang
-- llvm-13
+- llvm-14
 
 Building requires [deno](https://deno.land) as I am using my own _incomplete_ 'meta' build system: `rnn`, written in typescript.
 
@@ -38,12 +38,21 @@ The following will create a folder `build` where you will find the static librar
 ./rnn.ts build
 ```
 
+or
+
+```sh
+./rnn.ts setup
+mkdir build
+cd build
+cmake --build ../ --target llvm_c_2 -G Ninja -- -j4
+```
+
 ### Usage
 
-You need only to add `include` to your include path, and to link `llvm_c_2` and `LLVM-13`.
+You need only to add `include` to your include path, and to link `llvm_c_2` and `LLVM-14`.
 
 ```
--I<llvm_c_2>/include/ -L<llvm_c_2/build> -L<llvm-13 lib dir> -lllvm_c_2 -lLLVM-13
+-I<llvm_c_2>/include/ -L<llvm_c_2/build> -lllvm_c_2 `llvm-config[-14] --libdir --libs`
 ```
 
 ## Contributing

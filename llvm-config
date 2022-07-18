@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-llvm-config-13 $@ || llvm-config $@
+llvm-config-14 $@ || llvm-config $@
