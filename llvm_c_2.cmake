@@ -1,4 +1,6 @@
 add_library("llvm_c_2" STATIC
+  "build/CMakeFiles/3.26.4/CompilerIdCXX/CMakeCXXCompilerId.cpp"
+  "cmake-build-debug/CMakeFiles/3.25.2/CompilerIdCXX/CMakeCXXCompilerId.cpp"
   "src/ExecutionEngine/ExecutionEngine.cpp"
   "src/ExecutionEngine/GenericValue.cpp"
   "src/IR/BasicBlock.cpp"
@@ -12,6 +14,7 @@ add_library("llvm_c_2" STATIC
   "src/IR/Type.cpp"
   "src/IR/Value.cpp"
   "src/IR/Verifier.cpp"
+  "src/Support/Error.cpp"
   "src/Support/TargetSelect.cpp"
   "src/Support/raw_ostream.cpp"
   "include/llvm_c_2/ExecutionEngine/ExecutionEngine.h"
@@ -27,6 +30,7 @@ add_library("llvm_c_2" STATIC
   "include/llvm_c_2/IR/Type.h"
   "include/llvm_c_2/IR/Value.h"
   "include/llvm_c_2/IR/Verifier.h"
+  "include/llvm_c_2/Support/Error.h"
   "include/llvm_c_2/Support/TargetSelect.h"
   "include/llvm_c_2/Support/raw_ostream.h"
   "include/llvm_c_2/extern_c.h"
@@ -44,7 +48,7 @@ target_link_directories("llvm_c_2" PRIVATE
 )
 
 target_link_libraries("llvm_c_2"
-  "-lLLVM-14"
+  "-lLLVM-15"
 )
 
 target_compile_options("llvm_c_2" PRIVATE

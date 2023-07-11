@@ -292,5 +292,5 @@ export async function setupForBuild(
 ) {
   const dir = projectDir + "/" + buildDir;
   await Deno.mkdir(dir, { recursive: true });
-  await util.runCmd({ cmd: ["cmake", "-G", generator, "../"], cwd: dir });
+  await util.runCmd({ cmd: ["/usr/bin/cmake", "-G", generator, "../"], cwd: dir });
 }

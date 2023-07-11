@@ -1,6 +1,7 @@
 #include "IR/InlineAsm.h"
 
 #include <llvm/IR/InlineAsm.h>
+#include <llvm/Support/Error.h>
 
 LLVM_C_EXTERN_C_BEGIN
 
@@ -26,13 +27,15 @@ llvm_InlineAsmRef llvm_InlineAsm_get(
         canThrow));
 }
 
-bool llvm_InlineAsm_verify(
+llvm_ErrorRef llvm_InlineAsm_verify(
     llvm_FunctionTypeRef ty_ref,
     const char* ConstraintsData,
     size_t ConstraintsLength //
 ) {
     auto ty = reinterpret_cast<llvm::FunctionType*>(ty_ref);
-    return llvm::InlineAsm::Verify(ty, llvm::StringRef(ConstraintsData, ConstraintsLength));
+    auto err = llvm::InlineAsm::verify(ty, llvm::StringRef(ConstraintsData, ConstraintsLength));
+    auto err_ptr = new llvm::Error(std::move(err));
+    return reinterpret_cast<llvm_ErrorRef>(err_ptr);
 }
 
 LLVM_C_EXTERN_C_END

@@ -8,10 +8,10 @@
 
 LLVM_C_EXTERN_C_BEGIN
 
-bool llvm_InitializeNativeTarget();
+typedef struct llvm_Error_Opaque* llvm_ErrorRef;
 
-bool llvm_InitializeNativeTargetAsmPrinter();
+void llvm_Error_dispose(llvm_ErrorRef);
 
-bool llvm_InitializeNativeTargetAsmParser();
+bool llvm_Error_asBoolean(llvm_ErrorRef);
 
 LLVM_C_EXTERN_C_END

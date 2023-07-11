@@ -2,7 +2,7 @@
 
 This is my own attempt to create a C frontend to match the C++ API of llvm as close as reasonable.
 
-Currently targeting `llvm-14`
+Currently targeting `llvm-15`
 
 Some notable features include:
 

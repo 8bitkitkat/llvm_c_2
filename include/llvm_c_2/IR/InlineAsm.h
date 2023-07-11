@@ -3,11 +3,10 @@
 #include "../extern_c.h"
 
 #include "Type.h"
+#include "Support/Error.h"
 
-#ifndef __cplusplus
-#    include "stdbool.h"
-#    include "stddef.h"
-#endif
+#include "stdbool.h"
+#include "stddef.h"
 
 LLVM_C_EXTERN_C_BEGIN
 
@@ -31,7 +30,7 @@ llvm_InlineAsmRef llvm_InlineAsm_get(
     bool canThrow              /* = false */
 );
 
-bool llvm_InlineAsm_verify(
+llvm_ErrorRef llvm_InlineAsm_verify(
     llvm_FunctionTypeRef, const char* ConstraintsData, size_t ConstraintsLength);
 
 LLVM_C_EXTERN_C_END
