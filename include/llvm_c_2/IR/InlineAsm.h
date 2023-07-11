@@ -3,7 +3,7 @@
 #include "../extern_c.h"
 
 #include "Type.h"
-#include "Support/Error.h"
+#include "../Support/Error.h"
 
 #include "stdbool.h"
 #include "stddef.h"

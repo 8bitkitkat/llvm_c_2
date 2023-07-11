@@ -1,6 +1,4 @@
 add_library("llvm_c_2" STATIC
-  "build/CMakeFiles/3.26.4/CompilerIdCXX/CMakeCXXCompilerId.cpp"
-  "cmake-build-debug/CMakeFiles/3.25.2/CompilerIdCXX/CMakeCXXCompilerId.cpp"
   "src/ExecutionEngine/ExecutionEngine.cpp"
   "src/ExecutionEngine/GenericValue.cpp"
   "src/IR/BasicBlock.cpp"
