@@ -1,0 +1,14 @@
+{
+  "name": "rnn",
+  "module": "rnn.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "glob": "^10.3.4"
+  }
+}
