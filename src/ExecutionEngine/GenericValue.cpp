@@ -2,6 +2,8 @@
 
 #include "llvm/ExecutionEngine/GenericValue.h"
 
+#include <cstdlib>
+
 LLVM_C_EXTERN_C_BEGIN
 
 void llvm_GenericValue_free(llvm_GenericValueRef ref) {
