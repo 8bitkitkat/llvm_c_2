@@ -1,9 +1,10 @@
-#!/usr/bin/env -S deno run --allow-all
+#!/usr/bin/env -S bun run
+// #!/usr/bin/env -S deno run --config .tsconfig.json --allow-all
 
-import * as cmake from "./.rnn/lib/cmake.ts";
-import * as util from "./.rnn/lib/util.ts";
-import * as cxx from "./.rnn/lib/cxx.ts";
-import * as rnn from "./.rnn/lib/rnn.ts";
+import * as cmake from "./rnn/cmake";
+import * as util from "./rnn/util";
+import * as cxx from "./rnn/cxx";
+import * as rnn from "./rnn/rnn";
 
 const logger = new util.LineLogger();
 
@@ -62,7 +63,7 @@ async function clean(args: string[]): Promise<void> {
 
   const [head, ..._tail] = args;
 
-  const arr = [];
+  const arr: Promise<void>[] = [];
   switch (head) {
     case "vendor":
       arr.push(clean_vendor());
@@ -70,13 +71,13 @@ async function clean(args: string[]): Promise<void> {
 
     case "all":
       {
-        arr.push(clean_artifacts());
+        arr.push(...clean_artifacts());
         arr.push(clean_vendor());
       }
       break;
 
     default:
-      arr.push(clean_artifacts());
+      arr.push(...clean_artifacts());
   }
 
   await Promise.allSettled(arr);
@@ -97,8 +98,11 @@ async function build(_args: string[]) {
 
   logger.logPush("running build");
 
-  Deno.env.set("CC", "clang");
-  Deno.env.set("CXX", "clang++");
+  // Deno.env.set("CC", "clang");
+  // Deno.env.set("CXX", "clang++");
+  process.env.CC = "clang";
+  process.env.CXX = "clang++";
+
   await cmake.setupForBuild("./");
   await cxx.runNinja(undefined, "build/");
 
@@ -143,16 +147,14 @@ async function run(args: string[]) {
   logger.log(`Running ${name}`);
   util.stdout.write("\n");
 
-  const p = Deno.run({ cmd: [`./build/${name}`, ...passed_args] });
-  const s = await p.status();
-  if (!s.success) {
-    util.stdout.write(`\nExited with non-zero exit code: ${s.code}`);
-    if (s.signal) {
-      util.stdout.write(`Signal: ${s.signal}`);
+  const p = Bun.spawn({ cmd: [`./build/${name}`, ...passed_args] });
+  await p.exited;
+  if (p.exitCode != 0) {
+    util.stdout.write(`\nExited with non-zero exit code: ${p.exitCode}`);
+    if (p.signalCode) {
+      util.stdout.write(`Signal: ${p.signalCode}`);
     }
   }
-
-  p.close();
 }
 
 rnn.addSubCommands([
@@ -178,4 +180,4 @@ rnn.addSubCommands([
   },
 ]);
 
-await rnn.main(Deno.args);
+await rnn.main(process.argv.slice(2));

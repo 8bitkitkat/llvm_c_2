@@ -6,3 +6,6 @@ cmake-build-debug
 .vscode
 
 .done
+
+node_modules
+bun.lockb
