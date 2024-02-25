@@ -17,7 +17,6 @@ export function addSubCommands(sub_command: SubCommand[]) {
   subCommands.push(...sub_command);
 }
 
-// deno-lint-ignore require-await
 async function help(_args: string[]) {
   console.log(`Usage: ${process.argv0} ACTION [arguments]\n`);
 
@@ -46,7 +45,6 @@ export async function main(args: string[]) {
     console.error(`Unknown action: '${head}', use 'help' for help`)
   }
 
-  // util.clearLine();
   util.stdout.clearLine();
 }
 

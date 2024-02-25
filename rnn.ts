@@ -1,5 +1,4 @@
 #!/usr/bin/env -S bun run
-// #!/usr/bin/env -S deno run --config .tsconfig.json --allow-all
 
 import * as cmake from "./rnn/cmake";
 import * as util from "./rnn/util";
@@ -13,7 +12,10 @@ const cmake_targets: cmake.BuildTarget[] = [
     name: "llvm_c_2",
     kind: cmake.BinaryKind.staticLib,
     dir: "./",
-    files: ["**\/*.cpp", "**\/*.hpp", "**\/*.h"],
+    files: [
+      "src/**\/*.cpp",
+      "include/**\/*.h"
+    ],
     includeDirs: ["include/llvm_c_2", "src"],
     links: [],
     linkDirs: [],
@@ -38,7 +40,7 @@ const cmake_targets: cmake.BuildTarget[] = [
 ];
 
 const project: rnn.Project = {
-  name: "zinc",
+  name: "llvm_c_2",
   generators: [
     new cmake.CMakeGenerator(cmake_targets),
   ],
@@ -98,8 +100,6 @@ async function build(_args: string[]) {
 
   logger.logPush("running build");
 
-  // Deno.env.set("CC", "clang");
-  // Deno.env.set("CXX", "clang++");
   process.env.CC = "clang";
   process.env.CXX = "clang++";
 
@@ -120,7 +120,6 @@ async function run(args: string[]) {
     passed_args = args.slice(sep_index + 1, args.length);
   }
 
-  // const name = HelloWorld.build_targets[0].name;
   let name = "";
   if (our_args.length >= 1) {
     name = our_args[0];

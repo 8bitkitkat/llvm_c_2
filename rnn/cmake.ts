@@ -1,4 +1,3 @@
-// import { expandGlobSync } from "https://deno.land/std@0.121.0/fs/mod.ts";
 import { StringBuilder } from "./util";
 import { globIterateSync } from 'glob';
 
@@ -204,11 +203,6 @@ function generateCMakeSources(
   return map;
 }
 
-// type OtherOptions = {
-//   includeDirs: string[],
-
-// };
-
 export async function generate(name: string, targets: BuildTarget[]) {
   const root = process.cwd();
 
@@ -220,19 +214,15 @@ export async function generate(name: string, targets: BuildTarget[]) {
 
       for (const dir of lib.includes) {
         if (dir.startsWith("/") || dir.startsWith("./")) {
-          // target.includeDirs.push(dir);
           new_includeDirs.push(dir);
         } else {
-          // target.includeDirs.push(`./vendor.d/${lib.name}/${dir}`);
           new_includeDirs.push(`${vendor_root}/${dir}`);
         }
       }
       for (const dir of lib.linkDirs) {
         if (dir.startsWith("/") || dir.startsWith("./")) {
-          // target.linkDirs.push(dir);
           new_linkDirs.push(dir);
         } else {
-          // target.linkDirs.push(`./vendor.d/${lib.name}/${dir}`);
           new_linkDirs.push(`${vendor_root}/${dir}`);
         }
       }
@@ -252,7 +242,6 @@ export async function generate(name: string, targets: BuildTarget[]) {
         }
       }
 
-      // await Deno.mkdir(vendor_root, { recursive: true });
       Bun.spawnSync({ cmd: ["mkdir", "-p", vendor_root] });
 
       if (lib.remote) {
@@ -265,20 +254,15 @@ export async function generate(name: string, targets: BuildTarget[]) {
       }
 
       if (lib.setup) {
-        // Deno.chdir(vendor_root);
         process.chdir(vendor_root);
         await lib.setup();
       }
 
-      // Deno.chdir(root);
-      // Deno.chdir(vendor_root);
-      // Deno.writeTextFile(".done", "");
       process.chdir(root);
       process.chdir(vendor_root);
       await Bun.write(".done", "");
     }
   }
-  // Deno.chdir(root);
   process.chdir(root);
 
   const encoder = new TextEncoder();
@@ -286,7 +270,6 @@ export async function generate(name: string, targets: BuildTarget[]) {
 
   for (const [path, source] of files.entries()) {
     const text = encoder.encode(source);
-    // await Deno.writeFile(path, text);
     await Bun.write(path, text);
   }
 }
@@ -297,7 +280,6 @@ export async function setupForBuild(
   buildDir = "build",
 ) {
   const dir = projectDir + "/" + buildDir;
-  // await Deno.mkdir(dir, { recursive: true });
   Bun.spawnSync({ cmd: ["mkdir", "-p", dir] });
   await util.runCmd(["/usr/bin/cmake", "-G", generator, "../"], { cwd: dir });
 }
